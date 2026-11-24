@@ -1,0 +1,72 @@
+# SkyWalking 从零到一 · 系列教程
+
+> 面向**从未使用过 SkyWalking 的开发人员**，从概念、环境搭建到程序接入与生产实践，一步一个脚印讲清楚。
+> 本站基于 [VitePress](https://vitepress.dev/) 构建。
+
+## 本地运行
+
+需要 Node.js 18+。
+
+```bash
+npm install          # 安装依赖
+npm run docs:dev     # 本地预览 http://localhost:5173
+npm run docs:build   # 构建静态站点，产物在 docs/.vitepress/dist
+npm run docs:preview # 预览构建产物
+```
+
+## 目录结构
+
+```
+.
+├─ docs/                      # 站点源码（VitePress 根目录）
+│  ├─ .vitepress/
+│  │  └─ config.mts           # 站点配置：标题、导航、侧边栏、搜索
+│  ├─ public/                 # 静态资源（favicon 等）
+│  ├─ index.md                # 首页
+│  ├─ 01-认识SkyWalking.md
+│  ├─ 02-搭建环境.md
+│  ├─ 03-Java应用接入.md
+│  ├─ 04-进阶功能与生产实践.md
+│  └─ 05-多语言接入概览.md
+├─ .github/workflows/deploy.yml  # 推送 main 后自动构建并发布到 GitHub Pages
+├─ package.json
+└─ README.md
+```
+
+## 系列目录
+
+| 篇章 | 文件 | 内容 |
+| --- | --- | --- |
+| 第 1 篇 | [docs/01-认识SkyWalking.md](docs/01-认识SkyWalking.md) | 是什么、为什么需要、架构组成、核心概念（Trace/Span/Segment）、与同类工具对比 |
+| 第 2 篇 | [docs/02-搭建环境.md](docs/02-搭建环境.md) | Windows 本地直装 / Docker Compose / Linux 服务器三条路线，BanyanDB 存储配置，验证清单 |
+| 第 3 篇 | [docs/03-Java应用接入.md](docs/03-Java应用接入.md) | javaagent 原理、Spring Boot 双服务实战、IDEA/命令行接入、UI 上验证链路、排错 |
+| 第 4 篇 | [docs/04-进阶功能与生产实践.md](docs/04-进阶功能与生产实践.md) | UI 深入、自定义埋点（@Trace）、日志带 traceId、告警规则、采样、TTL、生产建议 |
+| 第 5 篇 | [docs/05-多语言接入概览.md](docs/05-多语言接入概览.md) | Node.js / Go / Python 接入、OpenTelemetry、Service Mesh、前端监控 |
+
+## 版本约定（教程写作时点：2026 年 11 月）
+
+| 组件 | 版本 | 说明 |
+| --- | --- | --- |
+| OAP Server（apache-skywalking-apm） | **10.4.0** | 10.x 稳定线最后一版，**内置 Web UI**，新手体验最顺 |
+| Java Agent（apache-skywalking-java-agent） | **9.8.0** | 支持 JDK 8 ~ 25；OAP 发行包内也自带 agent，可单独升级 |
+| BanyanDB（默认存储） | **0.10.x** | 与 OAP 10.4.0 配套（API 版本 0.10）；**不要**用 0.11.x 配 10.4.0 |
+| JDK（跑 OAP / UI） | 17（11/21/25 亦可） | 业务应用侧 JDK 8+ 均可接 agent |
+
+> ⚠️ **为什么不用最新的 11.x？** SkyWalking 11.0（2026-08 发布）起不再内置 Web UI，改为独立发布的
+> Horizon UI（Docker 镜像 `apache/skywalking-ui`，端口 17128），并新增无鉴权的 admin-server（17128/17129）。
+> 新手用 10.x 学习成本最低；11.x 的差异与升级注意事项见
+> [02-搭建环境.md 的「11.x 变化速览」](docs/02-搭建环境.md)。
+
+## 全系列约定
+
+- Windows 示例统一把 SkyWalking 解压到 `D:\skywalking\`；Linux 示例统一放 `/opt/skywalking/`
+- 演示应用为两个 Spring Boot 服务：`service-a`（8081）→ `service-b`（8082），注意避开 UI 的 8080
+- 所有链接与版本号以[官方下载页](https://skywalking.apache.org/downloads)和[官方文档](https://skywalking.apache.org/docs/)为准
+
+## 官方资源
+
+- 下载页：https://skywalking.apache.org/downloads
+- 主文档：https://skywalking.apache.org/docs/#SkyWalkingAPM
+- Java Agent 文档：https://skywalking.apache.org/docs/skywalking-java/latest/readme/
+- GitHub：https://github.com/apache/skywalking
+- 中文博客：https://skywalking.apache.org/zh/blog/
