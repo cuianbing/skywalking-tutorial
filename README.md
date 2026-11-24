@@ -15,7 +15,6 @@ npm run docs:preview # 预览构建产物
 ```
 
 ## 目录结构
-
 ```
 .
 ├─ docs/                      # 站点源码（VitePress 根目录）
@@ -23,15 +22,36 @@ npm run docs:preview # 预览构建产物
 │  │  └─ config.mts           # 站点配置：标题、导航、侧边栏、搜索
 │  ├─ public/                 # 静态资源（favicon 等）
 │  ├─ index.md                # 首页
+│  ├─ 404.md                  # 404 页面
 │  ├─ 01-认识SkyWalking.md
 │  ├─ 02-搭建环境.md
 │  ├─ 03-Java应用接入.md
 │  ├─ 04-进阶功能与生产实践.md
 │  └─ 05-多语言接入概览.md
 ├─ .github/workflows/deploy.yml  # 推送 main 后自动构建并发布到 GitHub Pages
+├─ netlify.toml                  # Netlify 部署配置（构建命令、产物目录）
 ├─ package.json
 └─ README.md
 ```
+
+## 部署
+
+站点的 `base` 由环境变量 `DOCS_BASE` 控制：默认 `/`（Netlify、自有域名），GitHub Pages 项目站点构建时设为 `/skywalking-tutorial/`。
+
+### Netlify
+
+`netlify.toml` 已配置好，Netlify 侧只需关联本仓库，无需手动填命令：
+
+| 配置项 | 值 |
+| --- | --- |
+| Build command | `npm run docs:build`（由 netlify.toml 提供） |
+| Publish directory | `docs/.vitepress/dist`（由 netlify.toml 提供） |
+| Node 版本 | 20（由 netlify.toml 提供） |
+| 环境变量 | 无需设置（`DOCS_BASE` 留空即为根路径） |
+
+### GitHub Pages
+
+`Settings → Pages → Source` 选择 **GitHub Actions**，推送 `main` 后由 `.github/workflows/deploy.yml` 自动构建发布，构建时自动带上 `DOCS_BASE=/skywalking-tutorial/`。
 
 ## 系列目录
 

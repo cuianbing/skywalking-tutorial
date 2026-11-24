@@ -1,0 +1,40 @@
+# Netlify 部署配置
+# 站点由 VitePress 构建，产物目录 docs/.vitepress/dist
+# 注意：Netlify 部署在根路径，不要设置 DOCS_BASE（默认 '/'）
+
+[build]
+  command = "npm run docs:build"
+  publish = "docs/.vitepress/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--no-fund --no-audit"
+
+# 只需要 main 分支触发生产部署，其余分支/PR 走 Deploy Preview
+[context.production]
+  command = "npm run docs:build"
+
+[context.deploy-preview]
+  command = "npm run docs:build"
+
+[context.branch-deploy]
+  command = "npm run docs:build"
+
+# 静态资源长缓存（文件名带 hash）
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/favicon.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# 基础安全响应头
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"

@@ -1,15 +1,19 @@
 import { defineConfig } from 'vitepress'
 
+// 站点部署根路径：
+// - Netlify / 自定义域名：根路径 '/'（默认）
+// - GitHub Pages 项目站点：构建时设置环境变量 DOCS_BASE=/skywalking-tutorial/
+const base = process.env.DOCS_BASE || '/'
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'SkyWalking 从零到一',
   description: '面向从未使用过 SkyWalking 的开发人员，从概念、环境搭建到程序接入与生产实践，一步一个脚印讲清楚。',
 
-  // GitHub Pages 项目站点 base 路径
-  base: '/skywalking-tutorial/',
+  base,
 
   lang: 'zh-CN',
-  // GitHub Pages 不支持无扩展名访问，保留默认（生成 .html）
+  // 保留默认（生成 .html），兼容不支持无扩展名访问的静态托管
   cleanUrls: false,
   lastUpdated: true,
 
@@ -17,7 +21,8 @@ export default defineConfig({
   ignoreDeadLinks: [/^https?:\/\/localhost/, /^https?:\/\/127\.0\.0\.1/],
 
   head: [
-    ['link', { rel: 'icon', href: '/skywalking-tutorial/favicon.svg', type: 'image/svg+xml' }]
+    ['link', { rel: 'icon', href: `${base}favicon.svg`, type: 'image/svg+xml' }],
+    ['meta', { name: 'theme-color', content: '#0E7490' }]
   ],
 
   themeConfig: {
