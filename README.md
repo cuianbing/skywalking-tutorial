@@ -19,7 +19,8 @@ npm run docs:preview # 预览构建产物
 .
 ├─ docs/                      # 站点源码（VitePress 根目录）
 │  ├─ .vitepress/
-│  │  └─ config.mts           # 站点配置：标题、导航、侧边栏、搜索
+│  │  ├─ config.mts           # 站点配置：标题、导航、侧边栏、搜索
+│  │  └─ theme/index.ts       # 自定义主题：接入 Mermaid 渲染器与工具栏
 │  ├─ public/                 # 静态资源（favicon 等）
 │  ├─ index.md                # 首页
 │  ├─ 404.md                  # 404 页面
@@ -33,6 +34,36 @@ npm run docs:preview # 预览构建产物
 ├─ package.json
 └─ README.md
 ```
+
+## Mermaid 图表
+
+接入 [`vitepress-mermaid-renderer`](https://github.com/sametcn99/vitepress-mermaid-renderer)：页面里写普通 ```mermaid 代码块，构建后自动渲染成可交互图表，**每张图右下角带一条工具栏**。
+
+| 按钮 | 作用 |
+| --- | --- |
+| 放大 / 缩小 | 0.2x ~ 10x 缩放，中间显示当前百分比 |
+| 重置视图 | 恢复缩放与平移 |
+| 复制源码 | 复制该图的 mermaid 源码 |
+| 下载图片 | 导出 PNG |
+| 全屏查看 | 弹窗模式放大查看 |
+| 收起工具栏 | 折叠成一个小箭头 |
+
+用法示例：
+
+````md
+```mermaid
+flowchart LR
+  A[浏览器] --> B[OAP Server]
+  B --> C[(BanyanDB)]
+```
+````
+
+实现要点：
+
+- 编辑器在 `docs/.vitepress/theme/index.ts`，工具栏文案已汉化，桌面 / 移动端 / 全屏三套按钮配置可分别调整。
+- mermaid 主题跟随 VitePress 明暗模式：切换深浅色时通过 `MutationObserver` 调用 `setConfig({ theme })` 重新渲染，避免深色页面出现白底图。
+- 图表库按需异步加载（约 1 MB 的独立 chunk），不影响正文首屏速度；加载失败只丢图表、不影响阅读。
+- 宽图可用工具栏缩放或全屏查看，不必改正文排版。
 
 ## 部署
 
